@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from branch_office_products.models import BranchOfficeProduct
 from branch_offices.serializers import BranchOfficeSerializer
-from products.serializer import ProductSerializer
+from products.serializers import ProductSerializer
 
 
 class BranchOfficeProductSerializer(serializers.ModelSerializer):
