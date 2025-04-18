@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from users.models import UserStatus, User
 
 
-class AuthSerializer(serializers.Serializer):
+class LogInSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
@@ -22,14 +22,14 @@ class AuthSerializer(serializers.Serializer):
         if not check_password(password, user.password):
             raise serializers.ValidationError('Credenciales inválidos.')
 
-        if user.status != UserStatus.ACTIVE:
-            raise serializers.ValidationError('El usuario no está habilitado para iniciar sesión')
+        if user.status == UserStatus.INACTIVE:
+            raise serializers.ValidationError('El usuario no está habilitado para iniciar sesión.')
 
         token = AccessToken()
         token['user_id'] = str(user.id)
         expires_at = timezone.now() + token.lifetime
 
         return {
-            "accessToken": str(token),
-            "accessTokenExpiresAt": expires_at.isoformat()
+            'accessToken': str(token),
+            'accessTokenExpiresAt': expires_at.isoformat()
         }

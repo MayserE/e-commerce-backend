@@ -3,13 +3,14 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from auth.serializers import AuthSerializer
+from auth.serializers import LogInSerializer
 
 
-class AuthView(APIView):
+class LogInView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
-        serializer = AuthSerializer(data=request.data)
+        serializer = LogInSerializer(data=request.data)
         if serializer.is_valid():
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'products',
     'branch_office_products',
     'users',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'shopping_carts',
+    'shopping_cart_products',
 ]
 
 # AUTH_USER_MODEL = 'users.User'
@@ -54,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'shared.middleware.JWTUserMiddleware'
+    'security.middleware.JwtMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -140,7 +142,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'shared.authentication.CustomJWTAuthentication',
+        'security.authentication.CustomJWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -151,10 +153,10 @@ SIMPLE_JWT = {
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
     'ALGORITHM': 'HS256',
-    #'SIGNING_KEY': SECRET_KEY,
+    # 'SIGNING_KEY': SECRET_KEY,
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'AUTH_HEADER_TYPES': 'Bearer',
+    'AUTH_TOKEN_CLASSES': ['rest_framework_simplejwt.tokens.AccessToken'],
     'JTI_CLAIM': 'jti',
     'USER_ID_FIELD_TYPE': 'uuid',
 }

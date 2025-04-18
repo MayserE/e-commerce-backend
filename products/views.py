@@ -1,16 +1,18 @@
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.serializers import UserRegistrationSerializer
+from security.permissions import IsAdminUser
+from .serializers import CreateProductSerializer
 
 
-class RegisterClientView(APIView):
-    permission_classes = [AllowAny]
+class CreateProductView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
     def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
+        serializer = CreateProductSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            return Response(UserRegistrationSerializer(user).data, status=status.HTTP_201_CREATED)
+            product = serializer.save()
+            return Response(CreateProductSerializer(product).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

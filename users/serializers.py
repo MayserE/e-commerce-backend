@@ -6,10 +6,17 @@ from rest_framework import serializers
 from users.models import User, UserRole, UserStatus
 
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['name', 'last_name', 'email']
+
+
+class RegisterClientSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
+
         model = User
         fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at', 'role', 'status']
@@ -20,7 +27,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             updated_at=datetime.now(),
             email=validated_data['email'],
             password=make_password(validated_data['password']),
-            role=UserRole.ADMIN,
+            role=UserRole.CLIENT,
             status=UserStatus.ACTIVE,
             name=validated_data['name'],
             last_name=validated_data['last_name'],
@@ -31,3 +38,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
         user.save()
         return user
+
+
+class GetAuthenticatedUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = '__all__'

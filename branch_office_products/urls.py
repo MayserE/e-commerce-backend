@@ -1,7 +1,7 @@
 from django.urls import path
 
-from branch_office_products.views import BranchOfficeProductListView
+from branch_office_products.views import GetBranchOfficeProductsView
 
 urlpatterns = [
-    path('', BranchOfficeProductListView.as_view(), name='branch_office_product_list')
+    path('', GetBranchOfficeProductsView.as_view(), name='branch_office_product_list')
 ]

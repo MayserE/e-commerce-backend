@@ -4,11 +4,11 @@ import jwt
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
-from shared.session_context import set_current_user, clear_current_user
+from security.session_context import set_current_user, clear_current_user
 from users.models import User
 
 
-class JWTUserMiddleware(MiddlewareMixin):
+class JwtMiddleware(MiddlewareMixin):
     def process_request(self, request):
         try:
             header = request.META.get("HTTP_AUTHORIZATION")
@@ -25,5 +25,5 @@ class JWTUserMiddleware(MiddlewareMixin):
             set_current_user(user)
 
         except Exception as e:
-            print(f"❌ Middleware error: {e}")
+            print(f"Middleware error: {e}")
             clear_current_user()
