@@ -9,14 +9,14 @@ from users.models import User, UserRole, UserStatus
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['name', 'last_name', 'email']
+        fields = ['id', 'created_at', 'updated_at', 'email', 'role', 'status', 'name', 'last_name', 'phone_number',
+                  'document_type', 'document_number', 'birthdate']
 
 
 class RegisterClientSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
-
         model = User
         fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at', 'role', 'status']

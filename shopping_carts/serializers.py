@@ -2,34 +2,34 @@ from datetime import datetime
 
 from rest_framework import serializers
 
-from shopping_carts.models import ShoppingCart
-from users.models import User
-from users.serializers import UserSerializer
+from products.models import Product
+from products.serializers import ProductSerializer
+from security.session_context import get_current_user
+from shopping_carts.models import ShoppingCart, ShoppingCartProduct
 
 
-class ShoppingCartSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+class ShoppingCartProductSerializer(serializers.ModelSerializer):
+    shopping_cart_id = serializers.UUIDField(source='shopping_cart.id')
+    product = ProductSerializer()
+
+    class Meta:
+        model = ShoppingCartProduct
+        fields = ['id', 'shopping_cart_id', 'product', 'created_at', 'updated_at', 'quantity']
+
+
+class GetCurrentShoppingCartSerializer(serializers.ModelSerializer):
+    user_id = serializers.UUIDField(source='user.id')
+    shopping_cart_products = ShoppingCartProductSerializer(many=True)
 
     class Meta:
         model = ShoppingCart
-        fields = '__all__'
+        fields = ['id', 'user_id', 'created_at', 'updated_at', 'shopping_cart_products']
 
 
-class CreateShoppingCartSerializer(serializers.ModelSerializer):
-    user_id = serializers.UUIDField(read_only=True)
-    user = UserSerializer(read_only=True)
+class NewShoppingCartProductSerializer(serializers.Serializer):
+    product_id = serializers.UUIDField()
+    quantity = serializers.IntegerField(min_value=1)
 
-    class Meta:
-        model = ShoppingCart
-        fields = '__all__'
-        read_only_fields = ('id', 'user', 'created_at', 'updated_at')
 
-    def create(self, validated_data):
-        user = User.objects.get(id=validated_data['user_id'])
-        shopping_cart = ShoppingCart(
-            user=user,
-            created_at=datetime.now(),
-            updated_at=datetime.now(),
-        )
-        shopping_cart.save()
-        return shopping_cart
+class AddShoppingCartProductSerializer(serializers.Serializer):
+    new_shopping_cart_products = NewShoppingCartProductSerializer(many=True)

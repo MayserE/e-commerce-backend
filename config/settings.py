@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'shopping_carts',
     'shopping_cart_products',
+    'orders',
 ]
 
 # AUTH_USER_MODEL = 'users.User'
